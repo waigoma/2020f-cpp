@@ -1,0 +1,49 @@
+#
+#	makefile
+#
+
+CXX		=	g++
+CXXFLAGS	=	$(CXXINCLUDE) $(DEBUG)
+CXXINCLUDE	=
+LINK.o		=	$(LINK.cc)
+LDLIBS		=	-lgdi32
+LOADLIBS	=	canvas/canvas.o
+DEBUG		=
+## DEBUG		=	-g
+ZIPCMD		=	zip
+
+TARGET	=	adv02-pre adv02 adv02-sub
+
+OBJS	=	adv02-pre.o adv02.o adv02-sub.o canvas/canvas.o
+WEXECS	=	adv02-pre.exe adv02.exe adv02-sub.exe
+
+SRC	=	adv02-pre.cpp adv02.cpp adv02-sub.cpp canvas/canvas.cpp canvas/canvas.h
+
+TITLE	=	adv02
+
+ARCHIVE	=	$(TITLE).zip
+
+default:
+	@echo make XXX となるようにターゲットを指定してください
+
+all:	$(TARGET)
+
+clean:	
+	-$(RM) $(WEXECS) $(TARGET) $(OBJS)
+
+zip:
+	-$(ZIPCMD) $(ARCHIVE) $(SRC)
+
+adv02-pre:		adv02-pre.o canvas/canvas.o
+adv02:			adv02.o canvas/canvas.o
+adv02-sub:		adv02-sub.o canvas/canvas.o
+
+canvas/canvas.o:	canvas/canvas.cpp canvas/canvas.h
+
+##
+##	extra rules for cygwin
+##
+.SUFFIXES:	.cpp .exe
+
+.cpp.exe:
+		$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@

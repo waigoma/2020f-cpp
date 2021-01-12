@@ -1,0 +1,72 @@
+#
+#	makefile
+#
+
+CXX		=	g++
+CXXFLAGS	=	$(CXXINCLUDE) $(DEBUG)
+CXXINCLUDE	=
+LINK.o		=	$(LINK.cc)
+LDLIBS		=	-lgdi32
+LOADLIBS	=	canvas/canvas.o
+DEBUG		=
+## DEBUG		=	-g
+ZIPCMD		=	zip
+
+THIS		=	$(TARGET03)
+TARGETS		=	$(TARGET03) $(TARGET02) $(TARGET01)
+OBJS		=	$(OBJS01) $(OBJS03) $(OBJS03) $(OBJSCV)
+WEXECS		=	$(WEXECS03) $(WEXECS02) $(WEXECS01)
+SRC		=	$(SRC03) $(SRCCV)
+
+TITLE		=	adv03
+ARCHIVE		=	$(TITLE).zip
+
+####
+TARGET03	=	adv03 adv03-sub
+OBJS03		=	adv03.o adv03-sub.o
+WEXECS03	=	adv03.exe adv03-sub.exe
+SRC03		=	adv03.cpp adv03-sub.cpp
+
+TARGET02	=	adv02-pre adv02 adv02-sub
+OBJS02		=	adv02-pre.o adv02.o adv02-sub.o
+WEXECS02	=	adv02-pre.exe adv02.exe adv02-sub.exe
+SRC02		=	adv02-pre.cpp adv02.cpp adv02-sub.cpp 
+
+TARGET01	=	Test adv01
+OBJS01		=	Test.o adv01.o
+WEXECS01	=	Test.exe adv01.exe
+SRC01		=	adv01.cpp
+
+OBJSCV		=	canvas/canvas.o
+SRCCV		=	canvas/canvas.cpp canvas/canvas.h
+
+default:
+	@echo make XXX となるようにターゲットを指定してください
+
+all:	$(TARGETS)
+
+this:	$(THIS)
+
+clean:	
+	-$(RM) $(WEXECS) $(TARGETS) $(OBJS)
+
+zip:
+	-$(ZIPCMD) $(ARCHIVE) $(SRC)
+
+adv03:			adv03.o canvas/canvas.o
+adv03-sub:		adv03-sub.o canvas/canvas.o
+adv02-pre:		adv02-pre.o canvas/canvas.o
+adv02:			adv02.o canvas/canvas.o
+adv02-sub:		adv02-sub.o canvas/canvas.o
+adv01:			adv01.o canvas/canvas.o
+Test:			Test.o canvas/canvas.o
+
+canvas/canvas.o:	canvas/canvas.cpp canvas/canvas.h
+
+##
+##	extra rules for cygwin
+##
+.SUFFIXES:	.cpp .exe
+
+.cpp.exe:
+		$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
